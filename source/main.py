@@ -12,7 +12,7 @@ parser.add_argument('--training_dir', default = 'DefaultTraing')
 parser.add_argument('--test_dir', default = 'DefaultTest')
 parser.add_argument('--mode', default='TrainAndTest', choices=['Train', 'Test', 'TrainAndTest'])
 parser.add_argument('--agg_type', default='Transformer', choices=['Transformer', 'Pooling'])
-parser.add_argument('--batchsize', type=int, default='4')
+parser.add_argument('--batchsize', type=int, default='2')
 parser.add_argument('--outdir', default='output')
 parser.add_argument('--pretrained', default=None)
 parser.add_argument('--num_agg_enc', type=int, default=3)
@@ -44,14 +44,18 @@ def main():
     print("Decoder:Prediction")
     print_model_parameters(trainObj.net.prediction)
     if args.mode in ('TrainAndTest','Train'):
-        epochs = 20
+        epochs = 500
     else:
         epochs = 1
     for epoch in range(epochs):
         print(f'Run {epoch+1}-th epoch')
+        # trainObj.run(args.mode, epoch=epoch, writer=logger,steps_per_test = 200,\
+        #             traindata=trainData, train_batch_size=args.batchsize, train_shuffle=True, train_loader_imgsize=(512, 512), train_encoder_imgsize=(args.encoder_imgsize, args.encoder_imgsize), train_decoder_imgsize=(512, 512),\
+        #             testdata=testData, test_batch_size=1, test_shuffle=False, test_loader_imgsize=(512, 512), test_encoder_imgsize=(256,256), test_decoder_imgsize=(512, 512))
+        
         trainObj.run(args.mode, epoch=epoch, writer=logger,steps_per_test = 200,\
-                    traindata=trainData, train_batch_size=args.batchsize, train_shuffle=True, train_loader_imgsize=(512, 512), train_encoder_imgsize=(args.encoder_imgsize, args.encoder_imgsize), train_decoder_imgsize=(512, 512),\
-                    testdata=testData, test_batch_size=1, test_shuffle=False, test_loader_imgsize=(512, 512), test_encoder_imgsize=(256,256), test_decoder_imgsize=(512, 512))
+                    traindata=trainData, train_batch_size=args.batchsize, train_shuffle=True, train_loader_imgsize=(512, 612), train_encoder_imgsize=(args.encoder_imgsize, args.encoder_imgsize), train_decoder_imgsize=(512, 612),\
+                    testdata=testData, test_batch_size=1, test_shuffle=False, test_loader_imgsize=(512, 612), test_encoder_imgsize=(256,306), test_decoder_imgsize=(512, 612))
 
 if __name__ == '__main__':
     main()
