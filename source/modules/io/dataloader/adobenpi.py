@@ -73,7 +73,6 @@ class dataloader():
         [directlist.append(p) for p in glob.glob(objlist[objid] + '/%s' % prefix,recursive=True) if os.path.isfile(p)]
         directlist = sorted(directlist)
 
-
         if len(directlist) == 0:
             return False
         if os.name == 'posix':
@@ -126,10 +125,18 @@ class dataloader():
                 mask = []
                 I = np.zeros((len(indexset), h, w, 3), np.float32)
             I[i, :, :, :] = img
-            nml_path = img_dir + '/normal.tif'
+            # nml_path = img_dir + '/normal.tif'
+            nml_path = img_dir + '/normal.png'
 
             if os.path.isfile(nml_path) and i == 0:
-                N = np.float32(cv2.resize(cv2.cvtColor(cv2.imread(nml_path, flags = cv2.IMREAD_ANYCOLOR | cv2.IMREAD_ANYDEPTH), cv2.COLOR_BGR2RGB), dsize=None, fx=scale, fy=scale,interpolation=cv2.INTER_NEAREST))/65535.0
+                N = cv2.resize(cv2.cvtColor(cv2.imread(nml_path, flags = cv2.IMREAD_ANYCOLOR | cv2.IMREAD_ANYDEPTH), cv2.COLOR_BGR2RGB), dsize=None, fx=scale, fy=scale,interpolation=cv2.INTER_NEAREST)
+
+                if N.dtype == 'uint8':
+                    bit_depth = 255.0
+                if N.dtype == 'uint16':
+                    bit_depth = 65535.0
+                    
+                N = np.float32(N)/bit_depth
                 N = 2 * N - 1
                 mask = np.abs(1 - np.sqrt(np.sum(N * N, axis=2))) < 1.0e-3
 
@@ -143,7 +150,7 @@ class dataloader():
         mean = np.mean(temp, axis=1)
         
         """Normalization of Data"""
-        I /= mean.reshape(-1,1,1)
+        # I /= mean.reshape(-1,1,1)
         I = np.transpose(I, (1, 2, 0))
         I = I.reshape(h, w, 3, self.numberOfImages)
         mask = (mask.reshape(h, w, 1)).astype(np.float32) # h, w, w
@@ -156,8 +163,8 @@ class dataloader():
             I, N, mask = horizontal_flip(I, N, mask)
         if np.random.rand() > prob:
             I, N, mask = vertical_flip(I, N, mask)
-        if np.random.rand() > prob:
-            I, N, mask = rotate(I, N, mask)
+        # if np.random.rand() > prob:
+        #     I, N, mask = rotate(I, N, mask)
         if np.random.rand() > prob:
             I = color_swap(I)
 

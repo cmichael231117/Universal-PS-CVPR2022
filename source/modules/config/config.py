@@ -8,7 +8,7 @@ class setup_configuration():
         self.train_datatype = 'AdobeNPI' # Train Data Type (Fix)
         self.train_prefix= '0*' # only images with this prefix are loaded
         self.train_suffix = '.data' #only directories with this suffix are loaded
-        self.train_maxNumberOfImages = 10 # max number of training images
+        self.train_maxNumberOfImages = 9 # max number of training images
         self.test_datatype = 'RealData' # Test Data Type (Fix)
         self.test_prefix = 'L*' # only images with this prefix are loaded
         self.test_suffix = '.data' # only directories with this suffix are loaded

@@ -64,7 +64,7 @@ class dataio(data.Dataset):
         if self.datatype == 'AdobeNPI':
             self.data.load(self.objlist, objid, prefix = self.prefix)
         elif self.datatype == 'RealData':
-            self.data.load(self.objlist, objid, prefix = self.prefix, loader_imgsize = self.loader_imgsize[0])
+            self.data.load(self.objlist, objid, prefix = self.prefix, loader_imgsize = self.loader_imgsize)
 
         else:
             raise Exception(' "datatype" != in "Cycles, Adobe, DiLiGenT"')

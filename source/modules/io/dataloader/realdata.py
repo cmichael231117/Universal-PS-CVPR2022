@@ -83,8 +83,8 @@ class dataloader():
                 w_ = img.shape[1]
                 h0 = int(h_)
                 w0 = int(w_)
-                h = imgsize
-                w = imgsize
+                h = imgsize[0]
+                w = imgsize[1]
                 margin = 4
 
                 N = np.zeros((h, w, 3), np.float32)
@@ -104,7 +104,7 @@ class dataloader():
                     col = colmax - colmin
 
                     if rowmin - margin <= 0 or rowmax + margin > img.shape[0] or colmin - margin <= 0 or colmax + margin > img.shape[1]:
-                        mask = np.float32(cv2.resize(mask, dsize=(h, w),interpolation=cv2.INTER_NEAREST))
+                        mask = np.float32(cv2.resize(mask, dsize=(w, h),interpolation=cv2.INTER_NEAREST))
                         flag = False
                     else:
                         flag = True
@@ -116,7 +116,7 @@ class dataloader():
                     elif col >= row and flag:
                         mask = mask[np.max([rowmin-int(0.5*(col-row))-margin,0]):np.min([rowmax+int(0.5*(col-row))+margin, img.shape[0]]), colmin-margin:colmax+margin]
                     if flag == True:
-                        mask = np.float32(cv2.resize(mask, dsize=(h, w),interpolation=cv2.INTER_NEAREST))
+                        mask = np.float32(cv2.resize(mask, dsize=(w, h),interpolation=cv2.INTER_NEAREST))
                 elif os.path.isfile(mask_path) == False and i == 0:
                     mask = np.ones((h, w), np.float32)
                     flag = False
@@ -133,7 +133,7 @@ class dataloader():
                 img = img[np.max([rowmin-int(0.5*(col-row))-margin,0]):np.min([rowmax+int(0.5*(col-row))+margin, img.shape[0]]), colmin-margin:colmax+margin, :]
 
 
-            img = cv2.resize(img, dsize=(h, w),interpolation=cv2.INTER_NEAREST)
+            img = cv2.resize(img, dsize=(w, h),interpolation=cv2.INTER_NEAREST)
 
 
 
@@ -158,7 +158,7 @@ class dataloader():
         temp = np.mean(I[:, mask.flatten()==1,:], axis=2)
         mean = np.mean(temp, axis=1)
         """Normalization of Data"""
-        I /= mean.reshape(-1, 1, 1)
+        # I /= mean.reshape(-1, 1, 1)
 
 
         #

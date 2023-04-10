@@ -52,7 +52,7 @@ class builder():
             writer.add('Learning Rate', self.net.print_lr(), epoch, 'Scalar')
             savedir = writer.outdir + '/checkpoint/' + datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
             self.net.save_models(savedir)
-            self.net.scheduler_step()
+            # self.net.scheduler_step()
             return losses/cnt
 
         if mode == 'Test':
